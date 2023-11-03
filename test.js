@@ -2,6 +2,7 @@ import capitalise from "./capitalise";
 import reverseString from "./reverse-string";
 import { calculator } from "./calculator";
 import caesarCipher from "./caesar-cipher";
+import analyseArray from "./analyse-array";
 
 describe("capitalise", () => {
   test("empty string", () => {
@@ -224,7 +225,7 @@ describe("calculator", () => {
   });
 });
 
-describe.only("caesarCipher", () => {
+describe("caesarCipher", () => {
   test("empty string", () => {
     expect(caesarCipher("", 1)).toBe("");
     expect(caesarCipher("", 20)).toBe("");
@@ -260,5 +261,152 @@ describe.only("caesarCipher", () => {
   test("negative shift", () => {
     expect(caesarCipher("abcdef", -1)).toBe("zabcde");
     expect(caesarCipher("abcdef", -26)).toBe("abcdef");
+  });
+});
+
+describe("analyseArray", () => {
+  test("empty array", () => {
+    expect(analyseArray([])).toStrictEqual({
+      average: null,
+      min: null,
+      max: null,
+      length: 0,
+    });
+  });
+  test("single element arrays", () => {
+    expect(analyseArray([1])).toStrictEqual({
+      average: 1,
+      min: 1,
+      max: 1,
+      length: 1,
+    });
+    expect(analyseArray([0])).toStrictEqual({
+      average: 0,
+      min: 0,
+      max: 0,
+      length: 1,
+    });
+    expect(analyseArray([-1])).toStrictEqual({
+      average: -1,
+      min: -1,
+      max: -1,
+      length: 1,
+    });
+    expect(analyseArray([0.5])).toStrictEqual({
+      average: 0.5,
+      min: 0.5,
+      max: 0.5,
+      length: 1,
+    });
+    expect(analyseArray([-0.5])).toStrictEqual({
+      average: -0.5,
+      min: -0.5,
+      max: -0.5,
+      length: 1,
+    });
+  });
+  test("uniform arrays", () => {
+    expect(analyseArray([1, 1, 1, 1])).toStrictEqual({
+      average: 1,
+      min: 1,
+      max: 1,
+      length: 4,
+    });
+    expect(analyseArray([0, 0, 0, 0])).toStrictEqual({
+      average: 0,
+      min: 0,
+      max: 0,
+      length: 4,
+    });
+    expect(analyseArray([-1, -1, -1, -1])).toStrictEqual({
+      average: -1,
+      min: -1,
+      max: -1,
+      length: 4,
+    });
+    expect(analyseArray([0.5, 0.5, 0.5, 0.5])).toStrictEqual({
+      average: 0.5,
+      min: 0.5,
+      max: 0.5,
+      length: 4,
+    });
+    expect(analyseArray([-0.5, -0.5, -0.5, -0.5])).toStrictEqual({
+      average: -0.5,
+      min: -0.5,
+      max: -0.5,
+      length: 4,
+    });
+  });
+  test("positive integers array", () => {
+    expect(analyseArray([1, 2, 3, 4])).toStrictEqual({
+      average: 2.5,
+      min: 1,
+      max: 4,
+      length: 4,
+    });
+  });
+  test("negative integers array", () => {
+    expect(analyseArray([-1, -2, -3, -4])).toStrictEqual({
+      average: -2.5,
+      min: -4,
+      max: -1,
+      length: 4,
+    });
+  });
+  test("positive and negative integers array", () => {
+    expect(analyseArray([-1, 2, 3, -4])).toStrictEqual({
+      average: 0,
+      min: -4,
+      max: 3,
+      length: 4,
+    });
+  });
+  test("positive fractions array", () => {
+    expect(analyseArray([0.25, 0.5, 0.75])).toStrictEqual({
+      average: 0.5,
+      min: 0.25,
+      max: 0.75,
+      length: 3,
+    });
+  });
+  test("negative fractions array", () => {
+    expect(analyseArray([-0.25, -0.5, -0.75])).toStrictEqual({
+      average: -0.5,
+      min: -0.75,
+      max: -0.25,
+      length: 3,
+    });
+  });
+  test("positive and negative fractions array", () => {
+    expect(analyseArray([-0.25, -0.5, 0.75])).toStrictEqual({
+      average: 0,
+      min: -0.5,
+      max: 0.75,
+      length: 3,
+    });
+  });
+  test("positive integers and fractions array", () => {
+    expect(analyseArray([1, 1.5, 2])).toStrictEqual({
+      average: 1.5,
+      min: 1,
+      max: 2,
+      length: 3,
+    });
+  });
+  test("negative integers and fractions array", () => {
+    expect(analyseArray([-1, -1.5, -2])).toStrictEqual({
+      average: -1.5,
+      min: -2,
+      max: -1,
+      length: 3,
+    });
+  });
+  test("positive and negative integers and fractions array", () => {
+    expect(analyseArray([-1, 1.5, -2])).toStrictEqual({
+      average: -0.5,
+      min: -2,
+      max: 1.5,
+      length: 3,
+    });
   });
 });
