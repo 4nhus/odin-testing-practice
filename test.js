@@ -1,6 +1,7 @@
 import capitalise from "./capitalise";
 import reverseString from "./reverse-string";
 import { calculator } from "./calculator";
+import caesarCipher from "./caesar-cipher";
 
 describe("capitalise", () => {
   test("empty string", () => {
@@ -220,5 +221,44 @@ describe("calculator", () => {
     test("one number", () => {
       expect(calculator.divide(1)).toBeUndefined();
     });
+  });
+});
+
+describe.only("caesarCipher", () => {
+  test("empty string", () => {
+    expect(caesarCipher("", 1)).toBe("");
+    expect(caesarCipher("", 20)).toBe("");
+  });
+  test("string", () => {
+    expect(caesarCipher("abcdef", 1)).toBe("bcdefg");
+    expect(caesarCipher("ABCDEF", 1)).toBe("BCDEFG");
+    expect(caesarCipher("ABCdef", 1)).toBe("BCDefg");
+  });
+  test("numeric string", () => {
+    expect(caesarCipher("2134", 1)).toBe("2134");
+    expect(caesarCipher("2134", 20)).toBe("2134");
+  });
+  test("symbol string", () => {
+    expect(caesarCipher("@!#$", 1)).toBe("@!#$");
+    expect(caesarCipher("@!#$", 20)).toBe("@!#$");
+  });
+  test("alphanumeric string", () => {
+    expect(caesarCipher("abcdef1234", 1)).toBe("bcdefg1234");
+  });
+  test("alphanumeric symbol string", () => {
+    expect(caesarCipher("abcdef1234!@#$", 1)).toBe("bcdefg1234!@#$");
+  });
+  test("zero shift", () => {
+    expect(caesarCipher("abcdef", 0)).toBe("abcdef");
+  });
+  test("twenty-six shift", () => {
+    expect(caesarCipher("abcdef", 26)).toBe("abcdef");
+  });
+  test("twenty-five shift", () => {
+    expect(caesarCipher("zabcde", 25)).toBe("yzabcd");
+  });
+  test("negative shift", () => {
+    expect(caesarCipher("abcdef", -1)).toBe("zabcde");
+    expect(caesarCipher("abcdef", -26)).toBe("abcdef");
   });
 });
